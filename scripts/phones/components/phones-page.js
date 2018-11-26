@@ -11,21 +11,24 @@ export default class PhonesPage {
 
     this._render();
 
+    this._initViewer();
+
     this._catalog = new PhoneCatalog({
       element: this._element.querySelector('[data-component="phone-catalog"]'),
       phones: PhoneService.getPhones(),
-    })
+      onPhoneSelected: (phoneId) => {
+        let phone = PhoneService.getPhone(phoneId);
 
-    this._initViewer();
+        this._catalog.hide();
+        this._viewer.showPhone(phone);
+      },
+    })
   }
 
   _initViewer() {
     this._viewer = new PhoneViewer({
       element: this._element.querySelector('[data-component="phone-viewer"]'),
     })
-
-    this._catalog.hide();
-    this._viewer.showPhone({});
   }
 
   _render() {
