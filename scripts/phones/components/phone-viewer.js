@@ -1,10 +1,13 @@
 import Component from '../../shared/component.js';
 
 export default class PhoneViewer extends Component {
-  constructor({ element }) {
+  constructor({ element, onBackClicked }) {
     super({ element });
 
+    this._onBackClicked = onBackClicked;
+
     this._element.addEventListener('click', event => this._onImgClick(event));
+    this._element.addEventListener('click', event => this._onBackClick(event));
   }
 
   showPhone(phone) {
@@ -20,6 +23,14 @@ export default class PhoneViewer extends Component {
     if (!img) return;
 
     this._element.querySelector('.phone').src = img.getAttribute('src');
+  }
+
+  _onBackClick(event) {
+    let backButton = event.target.closest('[data-element="back"]');
+
+    if (!backButton) return;
+
+    this._onBackClicked();
   }
 
   _render() {
