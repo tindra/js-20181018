@@ -13,6 +13,7 @@ export default class PhoneViewer extends Component {
   showPhone(phone) {
     this._phone = phone;
     this._render();
+    this._mainPhoneImg = this._element.querySelector('.phone');
 
     super.show();
   }
@@ -22,7 +23,7 @@ export default class PhoneViewer extends Component {
 
     if (!img) return;
 
-    this._element.querySelector('.phone').src = img.getAttribute('src');
+    this._mainPhoneImg.src = img.getAttribute('src');
   }
 
   _onBackClick(event) {
