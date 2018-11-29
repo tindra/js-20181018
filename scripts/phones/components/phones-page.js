@@ -2,6 +2,7 @@
 
 import PhoneCatalog from './phone-catalog.js';
 import PhoneViewer from './phone-viewer.js';
+import PhoneCart from './phone-cart.js';
 
 import PhoneService from '../services/phone-service.js';
 
@@ -13,6 +14,20 @@ export default class PhonesPage {
 
     this._initViewer();
 
+    this._initCatalog();
+
+    this._initCart();
+
+    this._element.addEventListener('click', event => this._onAddToCartClick(event));
+  }
+
+  _initViewer() {
+    this._viewer = new PhoneViewer({
+      element: this._element.querySelector('[data-component="phone-viewer"]'),
+    })
+  }
+
+  _initCatalog() {
     this._catalog = new PhoneCatalog({
       element: this._element.querySelector('[data-component="phone-catalog"]'),
       phones: PhoneService.getPhones(),
@@ -25,10 +40,18 @@ export default class PhonesPage {
     })
   }
 
-  _initViewer() {
-    this._viewer = new PhoneViewer({
-      element: this._element.querySelector('[data-component="phone-viewer"]'),
+  _initCart() {
+    this._cart = new PhoneCart({
+      element: this._element.querySelector('[data-component="phone-cart"]'),
     })
+  }
+
+  _onAddToCartClick(event) {
+    let button = event.target.closest('[data-element="add-to-basket"]');
+
+    if (!button) return;
+
+    this._cart.addToCart(button.dataset.phoneId);
   }
 
   _render() {
@@ -51,14 +74,8 @@ export default class PhonesPage {
                 </p>
             </section>
 
-            <section>
-                <p>Shopping Cart</p>
-                <ul>
-                    <li>Phone 1</li>
-                    <li>Phone 2</li>
-                    <li>Phone 3</li>
-                </ul>
-            </section>
+           <section data-component="phone-cart"></section>
+
         </div>
 
         <!--Main content-->
