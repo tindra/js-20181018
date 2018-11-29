@@ -3,6 +3,8 @@ import Component from '../../shared/component.js';
 export default class PhoneViewer extends Component {
   constructor({ element }) {
     super({ element });
+
+    this._element.addEventListener('click', event => this._onImgClick(event));
   }
 
   showPhone(phone) {
@@ -10,6 +12,14 @@ export default class PhoneViewer extends Component {
     this._render();
 
     super.show();
+  }
+
+  _onImgClick(event) {
+    let img = event.target.closest('.phone-thumbs li img');
+
+    if (!img) return;
+
+    this._element.querySelector('.phone').src = img.getAttribute('src');
   }
 
   _render() {
@@ -27,24 +37,11 @@ export default class PhoneViewer extends Component {
     <p>${phone.description}</p>
 
     <ul class="phone-thumbs">
+    ${ phone.images.map(img => `
       <li>
-        <img src="img/phones/motorola-xoom-with-wi-fi.0.jpg">
+        <img src="${img}">
       </li>
-      <li>
-        <img src="img/phones/motorola-xoom-with-wi-fi.1.jpg">
-      </li>
-      <li>
-        <img src="img/phones/motorola-xoom-with-wi-fi.2.jpg">
-      </li>
-      <li>
-        <img src="img/phones/motorola-xoom-with-wi-fi.3.jpg">
-      </li>
-      <li>
-        <img src="img/phones/motorola-xoom-with-wi-fi.4.jpg">
-      </li>
-      <li>
-        <img src="img/phones/motorola-xoom-with-wi-fi.5.jpg">
-      </li>
+    `).join('')}
     </ul>
     `;
   }
