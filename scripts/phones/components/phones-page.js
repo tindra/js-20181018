@@ -2,7 +2,7 @@
 
 import PhoneCatalog from './phone-catalog.js';
 import PhoneViewer from './phone-viewer.js';
-import PhoneCart from './phone-cart.js';
+import ShoppingCart from './shopping-cart.js';
 
 import PhoneService from '../services/phone-service.js';
 
@@ -18,44 +18,44 @@ export default class PhonesPage {
 
     this._initCart();
 
-    this._element.addEventListener('click', event => this._onAddToCartClick(event));
+    PhoneService.getPhones((phones) => {
+      this._catalog.showPhones(phones);
+    });
   }
 
   _initViewer() {
     this._viewer = new PhoneViewer({
       element: this._element.querySelector('[data-component="phone-viewer"]'),
-      onBackClicked: () => {
-        this._catalog.show();
-        this._viewer.hide();
-      },
-    })
+    });
+
+    this._viewer.on('back', () => {
+      this._viewer.hide();
+      this._catalog.show();
+    });
   }
 
   _initCatalog() {
     this._catalog = new PhoneCatalog({
       element: this._element.querySelector('[data-component="phone-catalog"]'),
-      phones: PhoneService.getPhones(),
-      onPhoneSelected: (phoneId) => {
-        let phone = PhoneService.getPhone(phoneId);
+    });
 
+    this._catalog.on('phoneSelected', event => {
+      let phone = PhoneService.getPhone(event.detail.phoneId, (phone) => {
         this._catalog.hide();
         this._viewer.showPhone(phone);
-      },
-    })
+      });
+    });
+
+    this._catalog.on('add', event => {
+      let phoneId = event.detail;
+      this._cart.addItem(phoneId);
+    });
   }
 
   _initCart() {
-    this._cart = new PhoneCart({
-      element: this._element.querySelector('[data-component="phone-cart"]'),
-    })
-  }
-
-  _onAddToCartClick(event) {
-    let button = event.target.closest('[data-element="add-to-basket"]');
-
-    if (!button) return;
-
-    this._cart.addToCart(button.dataset.phoneId);
+    this._cart = new ShoppingCart({
+      element: this._element.querySelector('[data-component="shopping-cart"]'),
+    });
   }
 
   _render() {
@@ -78,7 +78,7 @@ export default class PhonesPage {
                 </p>
             </section>
 
-           <section data-component="phone-cart"></section>
+           <section data-component="shopping-cart"></section>
 
         </div>
 
