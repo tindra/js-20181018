@@ -6,6 +6,7 @@ export default class PhoneViewer extends Component {
 
     this.on('click', '.phone-thumbs li img', event => this._onImgClick(event));
     this.on('click', '[data-element="button-back"]', event => this._onBackClick(event));
+    this.on('click', '[data-element="button-add"]', event => this._onCartClick(event));
   }
 
   showPhone(phone) {
@@ -24,6 +25,12 @@ export default class PhoneViewer extends Component {
     this._trigger('back');
   }
 
+  _onCartClick(event) {
+    let phoneItem = event.delegateTarget;
+
+    this._trigger('add', phoneItem.dataset.phoneId);
+  }
+
   _render() {
     const { _phone: phone } = this;
 
@@ -31,7 +38,7 @@ export default class PhoneViewer extends Component {
       <img class="phone" src="${phone.images[0]}">
 
     <button data-element="button-back">Back</button>
-    <button data-element="add-to-basket" data-phone-id="${phone.id}">Add to basket</button>
+    <button data-element="button-add" data-phone-id="${phone.id}">Add to basket</button>
 
 
     <h1>${phone.name}</h1>
