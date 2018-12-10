@@ -18,8 +18,22 @@ export default class PhoneCatalog extends Component {
     this._trigger('phoneSelected', { phoneId: phoneLink.closest('.thumbnail').dataset.phoneId });
   }
 
-  showPhones(phones) {
+  _compareValues(key) {
+    return function(a, b) {
+      if(!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) return;
+
+      const valueA = (typeof a[key] === 'string') ?
+        a[key].toUpperCase() : a[key];
+      const valueB = (typeof b[key] === 'string') ?
+        b[key].toUpperCase() : b[key];
+
+      return valueA > valueB ? 1 : -1;
+    };
+  }
+
+  showPhones(phones, sortBy = 'name') {
     this._phones = phones;
+    this._phones.sort(this._compareValues(sortBy));
     this._render();
     this.show();
   }

@@ -2,6 +2,7 @@
 
 import PhoneCatalog from './phone-catalog.js';
 import PhoneViewer from './phone-viewer.js';
+import PhoneSorting from './phone-sorting.js';
 import ShoppingCart from './shopping-cart.js';
 
 import PhoneService from '../services/phone-service.js';
@@ -15,6 +16,8 @@ export default class PhonesPage {
     this._initViewer();
 
     this._initCatalog();
+
+    this._initSorting();
 
     this._initCart();
 
@@ -57,6 +60,19 @@ export default class PhonesPage {
     });
   }
 
+  _initSorting() {
+    this._sorting = new PhoneSorting({
+      element: this._element.querySelector('[data-component="phone-sorting"]'),
+    });
+
+    this._sorting.on('sort', event => {
+      let sortBy =  event.detail;
+      let phones = PhoneService.getPhones((phones) => {
+        this._catalog.showPhones(phones, sortBy);
+      });
+    });
+  }
+
   _initCart() {
     this._cart = new ShoppingCart({
       element: this._element.querySelector('[data-component="shopping-cart"]'),
@@ -74,13 +90,7 @@ export default class PhonesPage {
                     <input>
                 </p>
 
-                <p>
-                    Sort by:
-                    <select>
-                        <option value="name">Alphabetical</option>
-                        <option value="age">Newest</option>
-                    </select>
-                </p>
+                <p data-component="phone-sorting"></p>
             </section>
 
            <section data-component="shopping-cart"></section>
