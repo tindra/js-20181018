@@ -23,9 +23,9 @@ export default class PhoneCatalog extends Component {
       if(!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) return;
 
       const valueA = (typeof a[key] === 'string') ?
-        a[key].toUpperCase() : a[key];
+        a[key].toLowerCase() : a[key];
       const valueB = (typeof b[key] === 'string') ?
-        b[key].toUpperCase() : b[key];
+        b[key].toLowerCase() : b[key];
 
       return valueA > valueB ? 1 : -1;
     };
@@ -38,9 +38,9 @@ export default class PhoneCatalog extends Component {
     this.show();
   }
 
-  searchPhones(phones, searchFor) {
-    let searchWord = searchFor.toUpperCase();
-    this._phones = phones.filter(phone => phone.name.toUpperCase().includes(searchWord));
+  searchPhones(phones, searchWords) {
+    let searchWord = searchWords.toLowerCase();
+    this._phones = phones.filter(phone => phone.name.toLowerCase().includes(searchWord));
     this._render();
     this.show();
   }

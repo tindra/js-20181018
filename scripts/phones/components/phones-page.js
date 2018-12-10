@@ -70,9 +70,9 @@ export default class PhonesPage {
 
     this._search.on('search', event => {
       this._viewer.hide();
-      let searchFor =  event.detail;
+      let searchWords =  event.detail;
       let phones = PhoneService.getPhones((phones) => {
-        this._catalog.searchPhones(phones, searchFor);
+        this._catalog.searchPhones(phones, searchWords);
       });
     });
   }
