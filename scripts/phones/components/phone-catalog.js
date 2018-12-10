@@ -38,6 +38,13 @@ export default class PhoneCatalog extends Component {
     this.show();
   }
 
+  searchPhones(phones, searchFor) {
+    let searchWord = searchFor.toUpperCase();
+    this._phones = phones.filter(phone => phone.name.toUpperCase().includes(searchWord));
+    this._render();
+    this.show();
+  }
+
   _render() {
     this._element.innerHTML = `
        <ul class="phones">

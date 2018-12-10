@@ -2,6 +2,7 @@
 
 import PhoneCatalog from './phone-catalog.js';
 import PhoneViewer from './phone-viewer.js';
+import PhoneSearch from './phone-search.js';
 import PhoneSorting from './phone-sorting.js';
 import ShoppingCart from './shopping-cart.js';
 
@@ -16,6 +17,8 @@ export default class PhonesPage {
     this._initViewer();
 
     this._initCatalog();
+
+    this._initSearch();
 
     this._initSorting();
 
@@ -60,6 +63,20 @@ export default class PhonesPage {
     });
   }
 
+  _initSearch() {
+    this._search = new PhoneSearch({
+      element: this._element.querySelector('[data-component="phone-search"]'),
+    });
+
+    this._search.on('search', event => {
+      this._viewer.hide();
+      let searchFor =  event.detail;
+      let phones = PhoneService.getPhones((phones) => {
+        this._catalog.searchPhones(phones, searchFor);
+      });
+    });
+  }
+
   _initSorting() {
     this._sorting = new PhoneSorting({
       element: this._element.querySelector('[data-component="phone-sorting"]'),
@@ -85,10 +102,7 @@ export default class PhonesPage {
         <!--Sidebar-->
         <div class="col-md-2">
             <section>
-                <p>
-                    Search:
-                    <input>
-                </p>
+                <p data-component="phone-search"></p>
 
                 <p data-component="phone-sorting"></p>
             </section>
