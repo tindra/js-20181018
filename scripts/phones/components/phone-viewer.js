@@ -18,6 +18,7 @@ export default class PhoneViewer extends Component {
   }
 
   _onImgClick(event) {
+    let img = event.delegateTarget;
     this._mainPhoneImg.src = img.getAttribute('src');
   }
 
